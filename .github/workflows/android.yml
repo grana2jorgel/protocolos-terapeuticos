@@ -30,7 +30,15 @@ jobs:
           node-version: '20'
 
       - name: Preparar Android SDK
-        uses: android-actions/setup-android@v3
+        run: |
+          SDK="${ANDROID_SDK_ROOT:-${ANDROID_HOME:-/usr/local/lib/android/sdk}}"
+          echo "ANDROID_HOME=$SDK"      >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$SDK"  >> "$GITHUB_ENV"
+          SDKMGR=$(find "$SDK/cmdline-tools" -name sdkmanager -type f | sort | tail -1)
+          echo "Usando $SDKMGR"
+          yes | "$SDKMGR" --licenses > /dev/null 2>&1 || true
+          "$SDKMGR" "platform-tools" "platforms;android-34" "build-tools;34.0.0" > /dev/null
+          ls "$SDK/build-tools"
 
       - name: Instalar Cordova
         run: npm install -g cordova@12
