@@ -1,0 +1,123 @@
+name: Construir APK y publicar en Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  # ---------------------------------------------------------------- APK
+  apk:
+    name: APK offline (WebView con los datos dentro)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Preparar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Preparar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Preparar Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Instalar Cordova
+        run: npm install -g cordova@12
+
+      - name: Crear el proyecto y copiar la app
+        run: |
+          cordova create build com.grana2jorgel.protocolos "Protocolos"
+          rm -rf build/www/*
+          cp index.html datos.js manifest.webmanifest sw.js build/www/
+          mkdir -p build/www/icons && cp icons/*.png build/www/icons/
+          # El service worker no hace falta dentro del APK: los ficheros ya son locales.
+          sed -i "s|navigator.serviceWorker.register('sw.js')|Promise.resolve()|" build/www/index.html
+
+      - name: Ajustar config.xml
+        run: |
+          cd build
+          python3 - <<'PY'
+          import re, pathlib
+          p = pathlib.Path('config.xml'); s = p.read_text()
+          s = s.replace('<description>', '<description>Vademécum de protocolos de agentes físicos y electroterapia. ')
+          extra = """
+              <preference name="AndroidWindowSplashScreenAnimatedIcon" value="www/icons/icon-512.png" />
+              <preference name="BackgroundColor" value="0xfff6f7f9" />
+              <preference name="Orientation" value="default" />
+              <preference name="android-minSdkVersion" value="24" />
+              <preference name="android-targetSdkVersion" value="34" />
+              <platform name="android">
+                  <icon density="mdpi" src="www/icons/icon-192.png" />
+                  <icon density="hdpi" src="www/icons/icon-192.png" />
+                  <icon density="xhdpi" src="www/icons/icon-512.png" />
+                  <icon density="xxhdpi" src="www/icons/icon-512.png" />
+                  <icon density="xxxhdpi" src="www/icons/icon-512.png" />
+              </platform>
+          """
+          s = s.replace('</widget>', extra + '</widget>')
+          p.write_text(s)
+          PY
+
+      - name: Compilar el APK
+        run: |
+          cd build
+          cordova platform add android@13
+          cordova build android --release -- --packageType=apk
+
+      - name: Firmar con clave de depuración
+        run: |
+          cd build
+          APK=$(find . -name "*-release-unsigned.apk" | head -1)
+          keytool -genkeypair -v -keystore clave.jks -storepass protocolos \
+            -keypass protocolos -alias protocolos -keyalg RSA -keysize 2048 \
+            -validity 10000 -dname "CN=Protocolos, OU=Fisioterapia, O=Personal, C=MX"
+          BT=$(ls -d $ANDROID_HOME/build-tools/* | sort -V | tail -1)
+          $BT/zipalign -v 4 "$APK" alineado.apk
+          $BT/apksigner sign --ks clave.jks --ks-pass pass:protocolos \
+            --key-pass pass:protocolos --out protocolos-terapeuticos.apk alineado.apk
+          $BT/apksigner verify protocolos-terapeuticos.apk
+
+      - name: Subir el APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: protocolos-terapeuticos-apk
+          path: build/protocolos-terapeuticos.apk
+          retention-days: 90
+
+      - name: Publicar versión descargable
+        if: github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: apk-${{ github.run_number }}
+          name: APK ${{ github.run_number }}
+          body: |
+            APK con los protocolos incluidos. Funciona sin conexión desde el primer arranque.
+            Para instalarlo hay que permitir «instalar apps de origen desconocido» en el móvil.
+          files: build/protocolos-terapeuticos.apk
+
+  # ---------------------------------------------------------------- Pages
+  pages:
+    name: Publicar la web
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+      - id: deployment
+        uses: actions/deploy-pages@v4
