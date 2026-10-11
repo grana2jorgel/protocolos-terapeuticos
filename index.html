@@ -43,25 +43,48 @@ header{position:sticky;top:0;z-index:20;background:var(--papel);border-bottom:1p
 .filtros select{flex:0 0 auto;font-size:13px;padding:7px 9px;border:1px solid var(--linea);
   border-radius:8px;background:var(--papel);color:var(--tinta);max-width:46vw}
 #conteo{font-size:12px;color:var(--suave);margin-top:8px}
-main{padding:12px 14px 40px;max-width:1100px;margin:0 auto}
-.grupo{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--acento);
-  margin:20px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--linea)}
-.grupo:first-child{margin-top:4px}
-.ficha{background:var(--papel);border:1px solid var(--linea);border-radius:var(--r);
-  padding:12px 14px;margin-bottom:9px;box-shadow:var(--sombra)}
-.cab{display:flex;flex-wrap:wrap;align-items:baseline;gap:7px;margin-bottom:7px}
-.cuadro{font-weight:650;font-size:15px;flex:1 1 auto;min-width:50%;letter-spacing:-.01em}
-.etq{font-size:11px;padding:2px 7px;border-radius:99px;background:var(--acento-claro);
-  color:var(--acento);white-space:nowrap;font-weight:600}
-.etq.fase{background:transparent;border:1px solid var(--linea);color:var(--tenue);font-weight:500}
-dl{margin:0;display:grid;grid-template-columns:76px 1fr;gap:3px 10px;font-size:13.5px}
-dt{color:var(--suave);font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;
-  font-weight:600;padding-top:2px}
-dd{margin:0;color:var(--tinta)}
-dd.param{font-weight:550}
-.nota{margin-top:8px;padding:7px 9px;background:var(--aviso-fondo);border-left:2px solid var(--aviso);
-  border-radius:0 6px 6px 0;font-size:12.5px;color:var(--tenue);line-height:1.45}
-.pie{margin-top:8px;font-size:11.5px;color:var(--suave);display:flex;gap:10px;flex-wrap:wrap}
+main{padding:12px 14px 40px;max-width:1180px;margin:0 auto}
+#resumen{background:var(--papel);border:1px solid var(--linea);border-radius:var(--r);
+  padding:11px 13px;margin-bottom:14px;box-shadow:var(--sombra)}
+#resumen .tit{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--suave);margin-bottom:8px}
+#resumen .chips{display:flex;flex-wrap:wrap;gap:6px}
+#resumen button{font:inherit;font-size:12.5px;padding:5px 10px;border:1px solid var(--linea);
+  border-radius:99px;background:var(--fondo);color:var(--tinta);cursor:pointer;white-space:nowrap}
+#resumen button:hover{border-color:var(--acento);color:var(--acento)}
+#resumen button b{font-weight:700;color:var(--acento);margin-left:4px}
+.bloque{background:var(--papel);border:1px solid var(--linea);border-radius:var(--r);
+  margin-bottom:14px;box-shadow:var(--sombra);overflow:hidden}
+.bloque-cab{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;
+  padding:11px 14px;border-bottom:1px solid var(--linea);background:var(--acento-claro)}
+.bloque-cab h2{margin:0;font-size:15px;font-weight:650;letter-spacing:-.01em;flex:1 1 auto;min-width:60%}
+.reg{font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--acento);opacity:.85}
+.nagentes{font-size:11.5px;color:var(--tenue);white-space:nowrap}
+.tabla-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;vertical-align:top;padding:7px 10px;border-bottom:1px solid var(--linea)}
+thead th{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--suave);
+  font-weight:700;white-space:nowrap;background:var(--papel);position:sticky;top:0;z-index:2}
+tbody tr:last-child td{border-bottom:0}
+td.agente{font-weight:650;white-space:nowrap;position:sticky;left:0;background:var(--papel);z-index:1;
+  box-shadow:1px 0 0 var(--linea)}
+td.fase{color:var(--tenue);white-space:nowrap;font-size:12px}
+td.ref{color:var(--suave);font-size:11.5px;white-space:nowrap;line-height:1.35}
+td.val{min-width:110px}
+td.sinpar{font-style:italic;color:var(--suave)}
+tr.det td{padding-top:0;padding-bottom:9px;font-size:12.5px;color:var(--tenue);line-height:1.45;
+  border-bottom:1px solid var(--linea)}
+tr.det .caja{position:sticky;left:0;display:block;max-width:calc(100vw - 44px)}
+tr.det .idem{font-style:italic;opacity:.8}
+tr.det .k{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--suave);
+  font-weight:700;margin-right:5px}
+tr.det .nota{display:block;margin-top:5px;padding:6px 9px;background:var(--aviso-fondo);
+  border-left:2px solid var(--aviso);border-radius:0 5px 5px 0;color:var(--tenue)}
+tr.par:hover td{background:var(--fondo)}
+tr.par:hover td.agente{background:var(--fondo)}
+.aviso-pie{max-width:1100px;margin:28px auto 40px;padding:0 14px;font-size:12px;
+  line-height:1.55;color:var(--suave)}
+.aviso-pie p{margin:0 0 8px}
 mark{background:#ffe9a8;color:inherit;border-radius:2px;padding:0 1px}
 @media (prefers-color-scheme:dark){mark{background:#5c4a16;color:#f6e6bd}}
 #vacio{text-align:center;color:var(--suave);padding:50px 20px;font-size:14px;display:none}
@@ -80,11 +103,11 @@ footer{text-align:center;font-size:11.5px;color:var(--suave);padding:0 20px 30px
   </div>
   <div class="filtros">
     <select id="fReg"></select><select id="fFam"></select><select id="fMod"></select>
-    <select id="fFase"></select><select id="fFuente"></select>
+    <select id="fFase"></select>
   </div>
   <div id="conteo"></div>
 </header>
-<main><div id="lista"></div><div id="vacio">Sin resultados. Prueba con menos filtros o con otra palabra.</div>
+<main><div id="resumen" hidden></div><div id="lista"></div><div id="vacio">Sin resultados. Prueba con menos filtros o con otra palabra.</div>
 <button id="mas" hidden>Ver más resultados</button></main>
 <footer>
   Extraído del tratado <em>Agentes Físicos Terapéuticos y Electroterapia</em>.<br>
@@ -95,7 +118,7 @@ footer{text-align:center;font-size:11.5px;color:var(--suave);padding:0 20px 30px
 (function(){
 'use strict';
 var D = window.PROTOCOLOS || [];
-var PASO = 60, mostrados = PASO, filtrados = D;
+var PASO = 25, mostrados = PASO, filtrados = D;
 
 function sinAcentos(s){ return s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase(); }
 var SINONIMOS = {
@@ -128,7 +151,7 @@ var SINONIMOS = {
 D.forEach(function(r){
   var sin = SINONIMOS[r.modalidad] || SINONIMOS[sinAcentos(r.modalidad).replace(/(^|\s)\S/g,function(c){return c.toUpperCase();})] || '';
   if(!sin){ var k=Object.keys(SINONIMOS).filter(function(x){return sinAcentos(x)===sinAcentos(r.modalidad);}); if(k.length) sin=SINONIMOS[k[0]]; }
-  r._b = sinAcentos([r.cuadro,r.modalidad,r.familia,r.parametros,r.tecnica,r.sesiones,r.region,r.fuente,r.notas].join(' ')) + ' ' + sin;
+  r._b = sinAcentos([r.cuadro,r.modalidad,r.familia,r.parametros,r.tecnica,r.sesiones,r.region,r.fuente,r.notas,r.origen].join(' ')) + ' ' + sin;
 });
 
 function opciones(sel, campo, etiqueta){
@@ -140,15 +163,9 @@ function opciones(sel, campo, etiqueta){
 }
 var q=document.getElementById('q'), limpiar=document.getElementById('limpiar');
 var fReg=document.getElementById('fReg'), fFam=document.getElementById('fFam'),
-    fMod=document.getElementById('fMod'), fFase=document.getElementById('fFase'),
-    fFuente=document.getElementById('fFuente');
+    fMod=document.getElementById('fMod'), fFase=document.getElementById('fFase');
 opciones(fReg,'region','Región'); opciones(fFam,'familia','Familia');
 opciones(fMod,'modalidad','Modalidad'); opciones(fFase,'fase','Fase');
-(function(){
-  var v={}; D.forEach(function(r){ (r.fuente||'').split(';').forEach(function(s){ s=s.trim(); if(s) v[s]=(v[s]||0)+1; }); });
-  var l=Object.keys(v).sort();
-  fFuente.innerHTML='<option value="">Fuente</option>'+l.map(function(k){return '<option value="'+k+'">'+k+' ('+v[k]+')</option>';}).join('');
-})();
 
 function esc(s){ return (s||'').replace(/[&<>]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]; }); }
 function resaltar(txt, palabras){
@@ -174,13 +191,12 @@ function resaltar(txt, palabras){
 function filtrar(){
   var t = q.value.trim();
   var palabras = sinAcentos(t).split(/\s+/).filter(Boolean);
-  var reg=fReg.value, fam=fFam.value, mod=fMod.value, fase=fFase.value, fue=fFuente.value;
+  var reg=fReg.value, fam=fFam.value, mod=fMod.value, fase=fFase.value;
   filtrados = D.filter(function(r){
     if(reg && r.region!==reg) return false;
     if(fam && r.familia!==fam) return false;
     if(mod && r.modalidad!==mod) return false;
     if(fase && r.fase!==fase) return false;
-    if(fue && (r.fuente||'').indexOf(fue)===-1) return false;
     for(var i=0;i<palabras.length;i++){ if(r._b.indexOf(palabras[i])===-1) return false; }
     return true;
   });
@@ -189,41 +205,119 @@ function filtrar(){
   pintar(palabras);
 }
 
-function pintar(term){ // term = array de palabras ya normalizadas
-  var lista=document.getElementById('lista'), trozo=filtrados.slice(0,mostrados), html='', grupo=null;
-  trozo.forEach(function(r){
-    if(r.region!==grupo){ grupo=r.region; html += '<div class="grupo">'+esc(grupo)+'</div>'; }
-    html += '<article class="ficha"><div class="cab">'+
-      '<span class="cuadro">'+resaltar(r.cuadro,term)+'</span>'+
-      '<span class="etq">'+esc(r.modalidad)+'</span>'+
-      (r.fase && r.fase!=='No consta' ? '<span class="etq fase">'+esc(r.fase)+'</span>' : '')+
-      '</div><dl>';
-    if(r.parametros) html += '<dt>Parámetros</dt><dd class="param">'+resaltar(r.parametros,term)+'</dd>';
-    if(r.tecnica && r.tecnica!=='No consta') html += '<dt>Técnica</dt><dd>'+resaltar(r.tecnica,term)+'</dd>';
-    if(r.sesiones && r.sesiones!=='No consta') html += '<dt>Sesiones</dt><dd>'+resaltar(r.sesiones,term)+'</dd>';
-    html += '</dl>';
-    var n=(r.notas||'').replace('[ANEXO B]','').trim();
-    if(n) html += '<div class="nota">'+resaltar(n,term)+'</div>';
-    html += '<div class="pie"><span>'+esc(r.fuente||'—')+'</span>'+
-            (r.cap?'<span>cap. '+esc(r.cap)+'</span>':'')+
-            (r.pag?'<span>pág. '+esc(r.pag)+'</span>':'')+'</div></article>';
+var COLS = ['frec','onda','pulso','inten','dosis','lambda','tiempo','temp','otros'];
+var ETQ  = {frec:'Frecuencia', onda:'Onda y modo', pulso:'Pulso', inten:'Intensidad',
+            dosis:'Potencia y dosis', lambda:'Long. onda', tiempo:'Tiempo',
+            temp:'Temperatura', otros:'Otros'};
+
+// Agrupa las filas consecutivas que comparten región + cuadro clínico.
+function agrupar(filas){
+  var g = [], ult = null;
+  filas.forEach(function(r){
+    var clave = r.region + '\u0001' + r.cuadro;
+    if(!ult || ult.clave !== clave){ ult = {clave:clave, region:r.region, cuadro:r.cuadro, filas:[]}; g.push(ult); }
+    ult.filas.push(r);
   });
+  return g;
+}
+
+function pintar(term){
+  var lista = document.getElementById('lista');
+  var grupos = agrupar(filtrados), trozo = grupos.slice(0, mostrados), html = '';
+
+  trozo.forEach(function(g){
+    // columnas de parámetro que realmente usa este cuadro
+    var usa = {};
+    g.filas.forEach(function(r){ if(r.p) COLS.forEach(function(c){ if(r.p[c]) usa[c] = 1; }); });
+    var cols = COLS.filter(function(c){ return usa[c]; });
+    var ancho = 3 + cols.length;   // agente + fase + columnas + referencia
+
+    html += '<section class="bloque"><div class="bloque-cab">' +
+            '<h2>' + resaltar(g.cuadro, term) + '</h2>' +
+            '<span class="reg">' + esc(g.region) + '</span>' +
+            '<span class="nagentes">' + g.filas.length +
+            (g.filas.length === 1 ? ' protocolo' : ' protocolos') + '</span></div>' +
+            '<div class="tabla-wrap"><table><thead><tr>' +
+            '<th>Agente</th><th>Fase</th>' +
+            cols.map(function(c){ return '<th>' + ETQ[c] + '</th>'; }).join('') +
+            '<th>Fuente</th></tr></thead><tbody>';
+
+    var previo = null;
+    g.filas.forEach(function(r){
+      var pp = r.p || {};
+      html += '<tr class="par"><td class="agente">' + esc(r.modalidad) + '</td>' +
+              '<td class="fase">' + (r.fase && r.fase !== 'No consta' ? esc(r.fase) : '—') + '</td>';
+      var tiene = cols.some(function(c){ return pp[c]; });
+      if(!tiene){
+        html += '<td class="sinpar" colspan="' + Math.max(cols.length, 1) + '">' +
+                (pp._sin ? resaltar(pp._sin, term) : 'la fuente no consigna parámetros propios') + '</td>';
+      } else {
+        cols.forEach(function(c){
+          html += '<td class="val">' + (pp[c] ? resaltar(pp[c], term) : '·') + '</td>';
+        });
+      }
+      html += '<td class="ref">' + esc(r.fuente || '—') +
+              (r.cap ? '<br>cap. ' + esc(r.cap) : '') +
+              (r.pag ? '<br><span title="Hoja del PDF del tratado; entre paréntesis, el número impreso">hoja '
+                       + esc(r.pag) + (r.pimp ? ' (' + esc(r.pimp) + ')' : '') + '</span>' : '') +
+              (r.origen && r.origen !== 'Cuerpo del tratado' ? '<br><em>' + esc(r.origen) + '</em>' : '') +
+              '</td></tr>';
+
+      // fila de continuación: técnica, sesiones y advertencias
+      var crudo = [r.tecnica, r.sesiones, r.notas].join('\u0001');
+      var det = '';
+      if(crudo === previo){
+        det = '<span class="idem">Técnica, sesiones y advertencias: las mismas del protocolo anterior.</span>';
+      } else {
+        previo = crudo;
+        if(r.tecnica  && r.tecnica  !== 'No consta') det += '<span class="k">Técnica</span>' + resaltar(r.tecnica, term) + ' ';
+        if(r.sesiones && r.sesiones !== 'No consta') det += '<span class="k">Sesiones</span>' + resaltar(r.sesiones, term) + ' ';
+        var n = (r.notas || '').replace('[ANEXO B]', '').trim();
+        if(n) det += '<span class="nota">' + resaltar(n, term) + '</span>';
+      }
+      if(det) html += '<tr class="det"><td colspan="' + ancho + '"><span class="caja">' + det + '</span></td></tr>';
+    });
+    html += '</tbody></table></div></section>';
+  });
+
   lista.innerHTML = html;
+
+  // panel de agentes aplicables al conjunto filtrado
+  var res = document.getElementById('resumen');
+  var activo = q.value.trim() || fReg.value || fFam.value || fMod.value || fFase.value;
+  if(activo && filtrados.length){
+    var cuenta = {};
+    filtrados.forEach(function(r){ if(r.modalidad) cuenta[r.modalidad] = (cuenta[r.modalidad]||0)+1; });
+    var ags = Object.keys(cuenta).sort(function(a,b){ return cuenta[b]-cuenta[a] || a.localeCompare(b,'es'); });
+    res.innerHTML = '<div class="tit">' + ags.length +
+      (ags.length === 1 ? ' agente aplicable' : ' agentes aplicables') + '</div><div class="chips">' +
+      ags.map(function(m){
+        return '<button type="button" data-mod="' + esc(m).replace(/"/g,'&quot;') + '">' +
+               esc(m) + '<b>' + cuenta[m] + '</b></button>'; }).join('') + '</div>';
+    res.hidden = false;
+  } else { res.hidden = true; res.innerHTML = ''; }
+
   document.getElementById('vacio').style.display = filtrados.length ? 'none' : 'block';
   document.getElementById('conteo').textContent =
-    filtrados.length + (filtrados.length===1?' protocolo':' protocolos') +
-    (filtrados.length>mostrados ? ' — mostrando '+mostrados : '');
-  var btn=document.getElementById('mas');
-  btn.hidden = filtrados.length <= mostrados;
-  btn.textContent = 'Ver más ('+(filtrados.length-mostrados)+' restantes)';
+    filtrados.length + (filtrados.length === 1 ? ' protocolo' : ' protocolos') +
+    ' en ' + grupos.length + (grupos.length === 1 ? ' cuadro' : ' cuadros') +
+    (grupos.length > mostrados ? ' — mostrando ' + mostrados : '');
+  var btn = document.getElementById('mas');
+  btn.hidden = grupos.length <= mostrados;
+  btn.textContent = 'Ver más (' + (grupos.length - mostrados) + ' cuadros restantes)';
 }
 
 var temp;
 q.addEventListener('input', function(){ clearTimeout(temp); temp=setTimeout(filtrar,140); });
 limpiar.addEventListener('click', function(){ q.value=''; q.focus(); filtrar(); });
-[fReg,fFam,fMod,fFase,fFuente].forEach(function(s){ s.addEventListener('change', filtrar); });
+[fReg,fFam,fMod,fFase].forEach(function(s){ s.addEventListener('change', filtrar); });
+document.getElementById('resumen').addEventListener('click', function(e){
+  var b = e.target.closest('button[data-mod]'); if(!b) return;
+  fMod.value = (fMod.value === b.dataset.mod) ? '' : b.dataset.mod;
+  filtrar(); window.scrollTo({top:0, behavior:'smooth'});
+});
 document.getElementById('mas').addEventListener('click', function(){
-  mostrados += PASO*2; pintar(sinAcentos(q.value.trim()).split(/\s+/).filter(Boolean)); });
+  mostrados += PASO; pintar(sinAcentos(q.value.trim()).split(/\s+/).filter(Boolean)); });
 
 document.getElementById('total').textContent = D.length + ' protocolos · sin conexión';
 filtrar();
@@ -233,5 +327,12 @@ if('serviceWorker' in navigator){
 }
 })();
 </script>
+<footer class="aviso-pie">
+  <p><strong>Cómo leer la referencia.</strong> «hoja» es el número de hoja del PDF del tratado —el que se
+  teclea en el lector para saltar—; entre paréntesis va el número impreso en esa página, 26 unidades menor.</p>
+  <p><strong>Advertencia.</strong> Un protocolo no es una indicación. Verifique las contraindicaciones en el
+  capítulo 42 del tratado y compruebe en qué unidades expresa cada magnitud su equipo. Cuando dos obras
+  discrepan figuran las dos cifras, nunca un promedio.</p>
+</footer>
 </body>
 </html>

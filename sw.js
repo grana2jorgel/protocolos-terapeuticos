@@ -1,6 +1,6 @@
 /* Service worker: cache-first sobre una versión fija. Al cambiar los datos,
    sube VERSION y el navegador descarta la caché anterior. */
-const VERSION = 'protocolos-v1';
+const VERSION = 'protocolos-v3';
 const ARCHIVOS = ['./', './index.html', './datos.js', './manifest.webmanifest',
                   './icons/icon-192.png', './icons/icon-512.png'];
 

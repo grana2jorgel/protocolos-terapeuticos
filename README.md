@@ -8,9 +8,11 @@ Funciona **sin conexión**: una vez abierta la primera vez, los datos quedan en 
 
 ## Qué hace
 
-- **Busca** en todo el contenido a la vez: patología, agente, parámetro, técnica. Sin acentos también encuentra (`epicondilalgia` o `epicondilalgia`, `laser` o `láser`).
-- **Filtra** por región anatómica, familia de agentes, modalidad, fase del proceso y obra de origen.
-- Cada ficha lleva **parámetros, técnica, sesiones, fuente, capítulo y página** del tratado, para poder volver al razonamiento completo.
+- **Busca** en todo el contenido a la vez: patología, agente, parámetro, técnica. Sin acentos también encuentra (`epicondilalgia`, `laser`).
+- **Agrupa por cuadro clínico**: al buscar una condición aparecen juntos todos los agentes aplicables a ella, uno por fila, y arriba un resumen con cada agente y cuántos protocolos aporta. Pulsando ese resumen se filtra por ese agente.
+- **Parámetros en columnas alineadas**: frecuencia, onda y modo, pulso, intensidad, potencia y dosis, longitud de onda, tiempo y temperatura. Cada cuadro muestra solo las columnas que usa. Lo que no encaja en ninguna va a «Otros», sin perder nada del texto original.
+- **Filtra** por región anatómica, familia de agentes, modalidad y fase del proceso.
+- Cada ficha lleva **parámetros, técnica, sesiones, fuente, capítulo y hoja** del tratado, para poder volver al razonamiento completo. «Hoja» es el número de hoja del PDF —el que se teclea en el lector para saltar—; entre paréntesis va el número impreso en esa página, 26 unidades menor.
 - Las **advertencias** —nivel de evidencia, discrepancias entre obras, lagunas declaradas— viajan con cada protocolo, en el recuadro ámbar.
 
 ---
@@ -53,7 +55,7 @@ Todos los protocolos están en **`datos.js`**, en un único array. Para cambiar,
 Después de editarlo hay que **subir el número de versión** en la primera línea de `sw.js`:
 
 ```js
-const VERSION = 'protocolos-v2';   // antes v1
+const VERSION = 'protocolos-v4';   // antes v3
 ```
 
 Sin ese cambio, los móviles que ya tengan la app seguirán viendo los datos antiguos, porque la caché está pensada para funcionar sin conexión.
@@ -73,8 +75,11 @@ Sin ese cambio, los móviles que ya tengan la app seguirán viendo los datos ant
 | `tecnica` | Colocación, montaje, método |
 | `sesiones` | Duración, número y periodicidad |
 | `fuente` | Sigla de la obra de origen |
-| `cap`, `pag` | Dónde buscarlo en el tratado |
+| `cap` | Capítulo del tratado |
+| `pag`, `pimp` | Hoja del PDF y número impreso en esa página |
+| `origen` | Cuerpo del tratado, Anexo B o Volumen de casos |
 | `notas` | Advertencias, discrepancias, evidencia |
+| `p` | Los parámetros ya repartidos en columnas (`frec`, `onda`, `pulso`, `inten`, `dosis`, `lambda`, `tiempo`, `temp`, `otros`) |
 
 ### Siglas de las obras
 
