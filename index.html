@@ -57,31 +57,42 @@ main{padding:12px 14px 40px;max-width:1180px;margin:0 auto}
   margin-bottom:14px;box-shadow:var(--sombra);overflow:hidden}
 .bloque-cab{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;
   padding:11px 14px;border-bottom:1px solid var(--linea);background:var(--acento-claro)}
-.bloque-cab h2{margin:0;font-size:15px;font-weight:650;letter-spacing:-.01em;flex:1 1 auto;min-width:60%}
+.bloque-cab h2{margin:0;font-size:15px;font-weight:650;letter-spacing:-.01em;flex:1 1 auto;min-width:50%}
 .reg{font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--acento);opacity:.85}
 .nagentes{font-size:11.5px;color:var(--tenue);white-space:nowrap}
 .tabla-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 table{border-collapse:collapse;width:100%;font-size:13px}
-th,td{text-align:left;vertical-align:top;padding:7px 10px;border-bottom:1px solid var(--linea)}
+th,td{text-align:left;vertical-align:top;padding:6px 9px;border-bottom:1px solid var(--linea)}
 thead th{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--suave);
   font-weight:700;white-space:nowrap;background:var(--papel);position:sticky;top:0;z-index:2}
 tbody tr:last-child td{border-bottom:0}
-td.agente{font-weight:650;white-space:nowrap;position:sticky;left:0;background:var(--papel);z-index:1;
+td.cagente{font-weight:650;white-space:nowrap;position:sticky;left:0;background:var(--papel);z-index:1;
   box-shadow:1px 0 0 var(--linea)}
+thead th.cagente{position:sticky;left:0;z-index:3;background:var(--papel);box-shadow:1px 0 0 var(--linea)}
 td.fase{color:var(--tenue);white-space:nowrap;font-size:12px}
 td.ref{color:var(--suave);font-size:11.5px;white-space:nowrap;line-height:1.35}
-td.val{min-width:110px}
-td.sinpar{font-style:italic;color:var(--suave)}
-tr.det td{padding-top:0;padding-bottom:9px;font-size:12.5px;color:var(--tenue);line-height:1.45;
-  border-bottom:1px solid var(--linea)}
-tr.det .caja{position:sticky;left:0;display:block;max-width:calc(100vw - 44px)}
-tr.det .idem{font-style:italic;opacity:.8}
-tr.det .k{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--suave);
-  font-weight:700;margin-right:5px}
-tr.det .nota{display:block;margin-top:5px;padding:6px 9px;background:var(--aviso-fondo);
-  border-left:2px solid var(--aviso);border-radius:0 5px 5px 0;color:var(--tenue)}
+td.val{min-width:92px}
+td.val.nada{color:var(--linea);text-align:center}
+tr.abrible{cursor:pointer}
+tr.abrible:focus-visible{outline:2px solid var(--acento);outline-offset:-2px}
+.flecha{display:inline-block;width:12px;color:var(--suave);font-size:10px;transition:transform .12s}
+.flecha.vacia{visibility:hidden}
+tr.abierto .flecha{transform:rotate(90deg);color:var(--acento)}
 tr.par:hover td{background:var(--fondo)}
-tr.par:hover td.agente{background:var(--fondo)}
+tr.par:hover td.cagente{background:var(--fondo)}
+tr.det td,tr.av td{padding-top:0;padding-bottom:9px;font-size:12.5px;color:var(--tenue);line-height:1.45;
+  border-bottom:1px solid var(--linea)}
+tr.det .caja,tr.av .caja{position:sticky;left:0;display:block;max-width:calc(100vw - 44px)}
+tr.det p{margin:0 0 5px}
+tr.det .k,tr.av .k{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--suave);
+  font-weight:700;margin-right:5px}
+.nota{padding:6px 9px;background:var(--aviso-fondo);border-left:2px solid var(--aviso);
+  border-radius:0 5px 5px 0;color:var(--tenue)}
+.sindosis .bloque-cab{background:var(--fondo)}
+.sindosis .aclara{margin:0;padding:10px 14px;font-size:12.5px;line-height:1.5;color:var(--tenue);
+  border-bottom:1px solid var(--linea)}
+#toggleSin{font:inherit;font-size:12px;font-weight:600;padding:4px 11px;border:1px solid var(--linea);
+  border-radius:99px;background:var(--papel);color:var(--acento);cursor:pointer}
 .aviso-pie{max-width:1100px;margin:28px auto 40px;padding:0 14px;font-size:12px;
   line-height:1.55;color:var(--suave)}
 .aviso-pie p{margin:0 0 8px}
@@ -209,8 +220,11 @@ var COLS = ['frec','onda','pulso','inten','dosis','lambda','tiempo','temp','otro
 var ETQ  = {frec:'Frecuencia', onda:'Onda y modo', pulso:'Pulso', inten:'Intensidad',
             dosis:'Potencia y dosis', lambda:'Long. onda', tiempo:'Tiempo',
             temp:'Temperatura', otros:'Otros'};
+var CAB = '<tr><th class="cagente">Agente</th><th>Fase</th>' +
+          COLS.map(function(c){ return '<th>' + ETQ[c] + '</th>'; }).join('') +
+          '<th>Fuente</th></tr>';
+var ANCHO = 3 + COLS.length;
 
-// Agrupa las filas consecutivas que comparten región + cuadro clínico.
 function agrupar(filas){
   var g = [], ult = null;
   filas.forEach(function(r){
@@ -221,76 +235,102 @@ function agrupar(filas){
   return g;
 }
 
+function refs(r){
+  var t = (r.origen && r.origen !== 'Cuerpo del tratado' ? r.origen + '. ' : '') +
+          'Hoja del PDF del tratado' + (r.pimp ? '; pág. impresa ' + r.pimp : '');
+  return '<span title="' + esc(t).replace(/"/g,'&quot;') + '">' + esc(r.fuente || '—') +
+         (r.cap ? '<br>c.' + esc(r.cap) : '') +
+         (r.pag ? ' · h.' + esc(r.pag) : '') +
+         (r.origen && r.origen !== 'Cuerpo del tratado' ? ' *' : '') + '</span>';
+}
+
+// Detalle plegable: técnica y sesiones. Las advertencias quedan siempre a la vista.
+function detalle(r, term, id){
+  var d = '';
+  if(r.tecnica  && r.tecnica  !== 'No consta') d += '<p><span class="k">Técnica</span>'  + resaltar(r.tecnica, term)  + '</p>';
+  if(r.sesiones && r.sesiones !== 'No consta') d += '<p><span class="k">Sesiones</span>' + resaltar(r.sesiones, term) + '</p>';
+  return d ? '<tr class="det" id="' + id + '" hidden><td colspan="' + ANCHO + '">' +
+             '<span class="caja">' + d + '</span></td></tr>' : '';
+}
+function aviso(r, term){
+  var n = (r.notas || '').replace('[ANEXO B]', '').trim();
+  return n ? '<tr class="av"><td colspan="' + ANCHO + '"><span class="caja nota">' +
+             resaltar(n, term) + '</span></td></tr>' : '';
+}
+
+var nid = 0;
+function filaProtocolo(r, term){
+  var pp = r.p || {}, h = '', id = 'd' + (++nid);
+  var hayDet = (r.tecnica && r.tecnica !== 'No consta') || (r.sesiones && r.sesiones !== 'No consta');
+  h += '<tr class="par' + (hayDet ? ' abrible' : '') + '"' + (hayDet ? ' data-det="' + id + '" tabindex="0"' : '') + '>' +
+       '<td class="cagente">' + (hayDet ? '<span class="flecha">▸</span>' : '<span class="flecha vacia"></span>') +
+       esc(r.modalidad) + '</td>' +
+       '<td class="fase">' + (r.fase && r.fase !== 'No consta' ? esc(r.fase) : '—') + '</td>';
+  COLS.forEach(function(c){
+    h += '<td class="val' + (pp[c] ? '' : ' nada') + '">' + (pp[c] ? resaltar(pp[c], term) : '·') + '</td>';
+  });
+  h += '<td class="ref">' + refs(r) + '</td></tr>';
+  h += aviso(r, term);
+  if(hayDet) h += detalle(r, term, id);
+  return h;
+}
+
 function pintar(term){
   var lista = document.getElementById('lista');
-  var grupos = agrupar(filtrados), trozo = grupos.slice(0, mostrados), html = '';
+  var conDosis = filtrados.filter(function(r){ return !r.sd; });
+  var sinDosis = filtrados.filter(function(r){ return  r.sd; });
+  var grupos = agrupar(conDosis), trozo = grupos.slice(0, mostrados), html = '';
+  nid = 0;
 
   trozo.forEach(function(g){
-    // columnas de parámetro que realmente usa este cuadro
-    var usa = {};
-    g.filas.forEach(function(r){ if(r.p) COLS.forEach(function(c){ if(r.p[c]) usa[c] = 1; }); });
-    var cols = COLS.filter(function(c){ return usa[c]; });
-    var ancho = 3 + cols.length;   // agente + fase + columnas + referencia
-
     html += '<section class="bloque"><div class="bloque-cab">' +
             '<h2>' + resaltar(g.cuadro, term) + '</h2>' +
             '<span class="reg">' + esc(g.region) + '</span>' +
             '<span class="nagentes">' + g.filas.length +
             (g.filas.length === 1 ? ' protocolo' : ' protocolos') + '</span></div>' +
-            '<div class="tabla-wrap"><table><thead><tr>' +
-            '<th>Agente</th><th>Fase</th>' +
-            cols.map(function(c){ return '<th>' + ETQ[c] + '</th>'; }).join('') +
-            '<th>Fuente</th></tr></thead><tbody>';
-
-    var previo = null;
-    g.filas.forEach(function(r){
-      var pp = r.p || {};
-      html += '<tr class="par"><td class="agente">' + esc(r.modalidad) + '</td>' +
-              '<td class="fase">' + (r.fase && r.fase !== 'No consta' ? esc(r.fase) : '—') + '</td>';
-      var tiene = cols.some(function(c){ return pp[c]; });
-      if(!tiene){
-        html += '<td class="sinpar" colspan="' + Math.max(cols.length, 1) + '">' +
-                (pp._sin ? resaltar(pp._sin, term) : 'la fuente no consigna parámetros propios') + '</td>';
-      } else {
-        cols.forEach(function(c){
-          html += '<td class="val">' + (pp[c] ? resaltar(pp[c], term) : '·') + '</td>';
-        });
-      }
-      html += '<td class="ref">' + esc(r.fuente || '—') +
-              (r.cap ? '<br>cap. ' + esc(r.cap) : '') +
-              (r.pag ? '<br><span title="Hoja del PDF del tratado; entre paréntesis, el número impreso">hoja '
-                       + esc(r.pag) + (r.pimp ? ' (' + esc(r.pimp) + ')' : '') + '</span>' : '') +
-              (r.origen && r.origen !== 'Cuerpo del tratado' ? '<br><em>' + esc(r.origen) + '</em>' : '') +
-              '</td></tr>';
-
-      // fila de continuación: técnica, sesiones y advertencias
-      var crudo = [r.tecnica, r.sesiones, r.notas].join('\u0001');
-      var det = '';
-      if(crudo === previo){
-        det = '<span class="idem">Técnica, sesiones y advertencias: las mismas del protocolo anterior.</span>';
-      } else {
-        previo = crudo;
-        if(r.tecnica  && r.tecnica  !== 'No consta') det += '<span class="k">Técnica</span>' + resaltar(r.tecnica, term) + ' ';
-        if(r.sesiones && r.sesiones !== 'No consta') det += '<span class="k">Sesiones</span>' + resaltar(r.sesiones, term) + ' ';
-        var n = (r.notas || '').replace('[ANEXO B]', '').trim();
-        if(n) det += '<span class="nota">' + resaltar(n, term) + '</span>';
-      }
-      if(det) html += '<tr class="det"><td colspan="' + ancho + '"><span class="caja">' + det + '</span></td></tr>';
-    });
+            '<div class="tabla-wrap"><table><thead>' + CAB + '</thead><tbody>';
+    g.filas.forEach(function(r){ html += filaProtocolo(r, term); });
     html += '</tbody></table></div></section>';
   });
 
+  // ---- grupo aparte: agentes señalados sin dosificación propia ----
+  if(sinDosis.length){
+    var verSin = document.body.dataset.versin === '1';
+    html += '<section class="bloque sindosis"><div class="bloque-cab">' +
+      '<h2>Agentes señalados sin dosificación propia</h2>' +
+      '<span class="nagentes">' + sinDosis.length + '</span>' +
+      '<button type="button" id="toggleSin">' + (verSin ? 'Ocultar' : 'Mostrar') + '</button></div>' +
+      '<p class="aclara">La obra indica estos agentes como <strong>posible aplicación</strong> para estos cuadros, ' +
+      'pero no consigna ningún parámetro para ellos. No son protocolos dosificados: para usarlos hay que tomar ' +
+      'los parámetros de gobierno de la modalidad y de la fase, en la Parte II y en el capítulo de la modalidad.</p>';
+    if(verSin){
+      html += '<div class="tabla-wrap"><table><thead><tr><th class="cagente">Agente</th><th>Cuadro</th>' +
+              '<th>Región</th><th>Fase</th><th>Fuente</th></tr></thead><tbody>';
+      sinDosis.slice(0, 400).forEach(function(r){
+        html += '<tr class="par"><td class="cagente">' + esc(r.modalidad) + '</td>' +
+                '<td>' + resaltar(r.cuadro, term) + '</td>' +
+                '<td class="fase">' + esc(r.region) + '</td>' +
+                '<td class="fase">' + (r.fase && r.fase !== 'No consta' ? esc(r.fase) : '—') + '</td>' +
+                '<td class="ref">' + refs(r) + '</td></tr>';
+      });
+      if(sinDosis.length > 400)
+        html += '<tr><td colspan="5" class="fase">… y ' + (sinDosis.length - 400) + ' más. Afina la búsqueda para verlos.</td></tr>';
+      html += '</tbody></table></div>';
+    }
+    html += '</section>';
+  }
+
   lista.innerHTML = html;
 
-  // panel de agentes aplicables al conjunto filtrado
   var res = document.getElementById('resumen');
   var activo = q.value.trim() || fReg.value || fFam.value || fMod.value || fFase.value;
-  if(activo && filtrados.length){
+  if(activo && conDosis.length){
     var cuenta = {};
-    filtrados.forEach(function(r){ if(r.modalidad) cuenta[r.modalidad] = (cuenta[r.modalidad]||0)+1; });
+    conDosis.forEach(function(r){ if(r.modalidad) cuenta[r.modalidad] = (cuenta[r.modalidad]||0)+1; });
     var ags = Object.keys(cuenta).sort(function(a,b){ return cuenta[b]-cuenta[a] || a.localeCompare(b,'es'); });
     res.innerHTML = '<div class="tit">' + ags.length +
-      (ags.length === 1 ? ' agente aplicable' : ' agentes aplicables') + '</div><div class="chips">' +
+      (ags.length === 1 ? ' agente con protocolo dosificado' : ' agentes con protocolo dosificado') +
+      '</div><div class="chips">' +
       ags.map(function(m){
         return '<button type="button" data-mod="' + esc(m).replace(/"/g,'&quot;') + '">' +
                esc(m) + '<b>' + cuenta[m] + '</b></button>'; }).join('') + '</div>';
@@ -299,13 +339,32 @@ function pintar(term){
 
   document.getElementById('vacio').style.display = filtrados.length ? 'none' : 'block';
   document.getElementById('conteo').textContent =
-    filtrados.length + (filtrados.length === 1 ? ' protocolo' : ' protocolos') +
+    conDosis.length + (conDosis.length === 1 ? ' protocolo dosificado' : ' protocolos dosificados') +
     ' en ' + grupos.length + (grupos.length === 1 ? ' cuadro' : ' cuadros') +
+    (sinDosis.length ? ' · ' + sinDosis.length + ' sin dosificación' : '') +
     (grupos.length > mostrados ? ' — mostrando ' + mostrados : '');
   var btn = document.getElementById('mas');
   btn.hidden = grupos.length <= mostrados;
   btn.textContent = 'Ver más (' + (grupos.length - mostrados) + ' cuadros restantes)';
 }
+
+// abrir y cerrar la técnica de un protocolo
+document.getElementById('lista').addEventListener('click', function(e){
+  if(e.target.closest('#toggleSin')){
+    document.body.dataset.versin = document.body.dataset.versin === '1' ? '0' : '1';
+    pintar(sinAcentos(q.value.trim()).split(/\s+/).filter(Boolean));
+    return;
+  }
+  var tr = e.target.closest('tr.abrible'); if(!tr) return;
+  var d = document.getElementById(tr.dataset.det); if(!d) return;
+  d.hidden = !d.hidden;
+  tr.classList.toggle('abierto', !d.hidden);
+});
+document.getElementById('lista').addEventListener('keydown', function(e){
+  if(e.key !== 'Enter' && e.key !== ' ') return;
+  var tr = e.target.closest('tr.abrible'); if(!tr) return;
+  e.preventDefault(); tr.click();
+});
 
 var temp;
 q.addEventListener('input', function(){ clearTimeout(temp); temp=setTimeout(filtrar,140); });
