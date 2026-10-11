@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Protocolos terapéuticos</title>
+<meta name="description" content="Vademécum consultable de protocolos de agentes físicos y electroterapia.">
+<meta name="theme-color" content="#1d3557">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<style>
+:root{
+  --tinta:#15202b; --tenue:#5b6b7c; --suave:#8496a8;
+  --fondo:#f6f7f9; --papel:#ffffff; --linea:#dfe4ea;
+  --acento:#1d3557; --acento-claro:#e8eef6; --aviso:#8a5a00; --aviso-fondo:#fdf4e3;
+  --r:10px; --sombra:0 1px 2px rgba(20,32,43,.06), 0 4px 14px rgba(20,32,43,.05);
+}
+@media (prefers-color-scheme:dark){
+  :root{--tinta:#e7ecf2;--tenue:#9fb0c0;--suave:#7c8da0;--fondo:#11161c;--papel:#19212a;
+        --linea:#2a3642;--acento:#7fb0e8;--acento-claro:#1d2a38;--aviso:#e8bf73;--aviso-fondo:#2a2317;
+        --sombra:0 1px 2px rgba(0,0,0,.3), 0 4px 14px rgba(0,0,0,.25);}
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--fondo);color:var(--tinta);
+  font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+  -webkit-text-size-adjust:100%}
+header{position:sticky;top:0;z-index:20;background:var(--papel);border-bottom:1px solid var(--linea);
+  padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));padding-top:max(10px,env(safe-area-inset-top,10px))}
+.titulo{display:flex;align-items:baseline;gap:10px;margin-bottom:8px}
+.titulo h1{font-size:16px;margin:0;font-weight:650;letter-spacing:-.01em}
+.titulo span{font-size:12px;color:var(--suave)}
+.buscador{position:relative}
+#q{width:100%;padding:11px 36px 11px 12px;font-size:16px;border:1px solid var(--linea);
+  border-radius:var(--r);background:var(--fondo);color:var(--tinta);outline:none}
+#q:focus{border-color:var(--acento);background:var(--papel)}
+#q::-webkit-search-cancel-button,#q::-webkit-search-decoration{-webkit-appearance:none;appearance:none}
+#limpiar{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;
+  color:var(--suave);font-size:20px;line-height:1;cursor:pointer;padding:4px 8px;display:none}
+.filtros{display:flex;gap:6px;overflow-x:auto;margin-top:8px;padding-bottom:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.filtros::-webkit-scrollbar{display:none}
+.filtros select{flex:0 0 auto;font-size:13px;padding:7px 9px;border:1px solid var(--linea);
+  border-radius:8px;background:var(--papel);color:var(--tinta);max-width:46vw}
+#conteo{font-size:12px;color:var(--suave);margin-top:8px}
+main{padding:12px 14px 40px;max-width:1100px;margin:0 auto}
+.grupo{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--acento);
+  margin:20px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--linea)}
+.grupo:first-child{margin-top:4px}
+.ficha{background:var(--papel);border:1px solid var(--linea);border-radius:var(--r);
+  padding:12px 14px;margin-bottom:9px;box-shadow:var(--sombra)}
+.cab{display:flex;flex-wrap:wrap;align-items:baseline;gap:7px;margin-bottom:7px}
+.cuadro{font-weight:650;font-size:15px;flex:1 1 auto;min-width:50%;letter-spacing:-.01em}
+.etq{font-size:11px;padding:2px 7px;border-radius:99px;background:var(--acento-claro);
+  color:var(--acento);white-space:nowrap;font-weight:600}
+.etq.fase{background:transparent;border:1px solid var(--linea);color:var(--tenue);font-weight:500}
+dl{margin:0;display:grid;grid-template-columns:76px 1fr;gap:3px 10px;font-size:13.5px}
+dt{color:var(--suave);font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;
+  font-weight:600;padding-top:2px}
+dd{margin:0;color:var(--tinta)}
+dd.param{font-weight:550}
+.nota{margin-top:8px;padding:7px 9px;background:var(--aviso-fondo);border-left:2px solid var(--aviso);
+  border-radius:0 6px 6px 0;font-size:12.5px;color:var(--tenue);line-height:1.45}
+.pie{margin-top:8px;font-size:11.5px;color:var(--suave);display:flex;gap:10px;flex-wrap:wrap}
+mark{background:#ffe9a8;color:inherit;border-radius:2px;padding:0 1px}
+@media (prefers-color-scheme:dark){mark{background:#5c4a16;color:#f6e6bd}}
+#vacio{text-align:center;color:var(--suave);padding:50px 20px;font-size:14px;display:none}
+#mas{display:block;width:100%;margin:14px 0 0;padding:12px;font-size:14px;font-weight:600;
+  border:1px solid var(--linea);border-radius:var(--r);background:var(--papel);color:var(--acento);cursor:pointer}
+footer{text-align:center;font-size:11.5px;color:var(--suave);padding:0 20px 30px;line-height:1.6}
+@media(min-width:760px){ dl{grid-template-columns:92px 1fr} .titulo h1{font-size:18px} }
+</style>
+</head>
+<body>
+<header>
+  <div class="titulo"><h1>Protocolos terapéuticos</h1><span id="total"></span></div>
+  <div class="buscador">
+    <input id="q" type="search" placeholder="Buscar patología, agente, parámetro…" autocomplete="off" enterkeyhint="search">
+    <button id="limpiar" aria-label="Limpiar búsqueda">&times;</button>
+  </div>
+  <div class="filtros">
+    <select id="fReg"></select><select id="fFam"></select><select id="fMod"></select>
+    <select id="fFase"></select><select id="fFuente"></select>
+  </div>
+  <div id="conteo"></div>
+</header>
+<main><div id="lista"></div><div id="vacio">Sin resultados. Prueba con menos filtros o con otra palabra.</div>
+<button id="mas" hidden>Ver más resultados</button></main>
+<footer>
+  Extraído del tratado <em>Agentes Físicos Terapéuticos y Electroterapia</em>.<br>
+  Un protocolo no es una indicación: verifica siempre contraindicaciones y unidades de tu equipo.
+</footer>
+<script src="datos.js"></script>
+<script>
+(function(){
+'use strict';
+var D = window.PROTOCOLOS || [];
+var PASO = 60, mostrados = PASO, filtrados = D;
+
+function sinAcentos(s){ return s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase(); }
+var SINONIMOS = {
+  'Diatermia CRET':'tecarterapia tecar transferencia electrica capacitiva resistiva diatermia indiba',
+  'Onda corta':'diatermia onda corta de alta frecuencia',
+  'Onda corta pulsada':'diatermia pulsada atermica',
+  'Microondas':'diatermia por microondas radarterapia',
+  'TENS':'electroanalgesia estimulacion nerviosa transcutanea',
+  'NMES':'electroestimulacion neuromuscular eenm',
+  'FES':'estimulacion electrica funcional',
+  'Rusa/Kots':'corriente rusa kots',
+  'Interferencial':'corrientes interferenciales media frecuencia nemec',
+  'Excitomotriz':'faradizacion corriente excitomotora',
+  'Galvanica':'corriente continua galvanismo',
+  'Iontoforesis':'ionizacion iontoforesis transferencia ionica',
+  'Diadinamicas':'bernard diadinamicas df mf cp lp rs',
+  'Ultrasonido':'ultrasonoterapia us sonoterapia',
+  'Ondas de choque':'eswt litotricia ondas de choque extracorporeas',
+  'Laser':'laserterapia fotobiomodulacion lllt',
+  'LED':'fotobiomodulacion led luz roja',
+  'ILIB':'irradiacion sanguinea laser intravascular',
+  'Terapia fotodinamica':'pdt tfd fotodinamica',
+  'Magnetoterapia':'campos magneticos magnetoterapia pemf',
+  'Crioterapia':'frio hielo crioterapia',
+  'Termoterapia superficial':'calor termoterapia parafina compresas',
+  'Hidroterapia':'agua balneoterapia hidroterapia',
+  'Traccion':'traccion vertebral elongacion vertebral',
+  'Biofeedback':'retroalimentacion biofeedback emg'
+};
+D.forEach(function(r){
+  var sin = SINONIMOS[r.modalidad] || SINONIMOS[sinAcentos(r.modalidad).replace(/(^|\s)\S/g,function(c){return c.toUpperCase();})] || '';
+  if(!sin){ var k=Object.keys(SINONIMOS).filter(function(x){return sinAcentos(x)===sinAcentos(r.modalidad);}); if(k.length) sin=SINONIMOS[k[0]]; }
+  r._b = sinAcentos([r.cuadro,r.modalidad,r.familia,r.parametros,r.tecnica,r.sesiones,r.region,r.fuente,r.notas].join(' ')) + ' ' + sin;
+});
+
+function opciones(sel, campo, etiqueta){
+  var v = {};
+  D.forEach(function(r){ if(r[campo]) v[r[campo]] = (v[r[campo]]||0)+1; });
+  var lista = Object.keys(v).sort(function(a,b){ return a.localeCompare(b,'es'); });
+  sel.innerHTML = '<option value="">'+etiqueta+'</option>' +
+    lista.map(function(k){ return '<option value="'+k.replace(/"/g,'&quot;')+'">'+k+' ('+v[k]+')</option>'; }).join('');
+}
+var q=document.getElementById('q'), limpiar=document.getElementById('limpiar');
+var fReg=document.getElementById('fReg'), fFam=document.getElementById('fFam'),
+    fMod=document.getElementById('fMod'), fFase=document.getElementById('fFase'),
+    fFuente=document.getElementById('fFuente');
+opciones(fReg,'region','Región'); opciones(fFam,'familia','Familia');
+opciones(fMod,'modalidad','Modalidad'); opciones(fFase,'fase','Fase');
+(function(){
+  var v={}; D.forEach(function(r){ (r.fuente||'').split(';').forEach(function(s){ s=s.trim(); if(s) v[s]=(v[s]||0)+1; }); });
+  var l=Object.keys(v).sort();
+  fFuente.innerHTML='<option value="">Fuente</option>'+l.map(function(k){return '<option value="'+k+'">'+k+' ('+v[k]+')</option>';}).join('');
+})();
+
+function esc(s){ return (s||'').replace(/[&<>]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]; }); }
+function resaltar(txt, palabras){
+  var h = esc(txt);
+  if(!palabras || !palabras.length) return h;
+  var plano = sinAcentos(h), marcas = [];
+  palabras.forEach(function(t){
+    var i = 0, p;
+    while(t && (p = plano.indexOf(t, i)) !== -1){ marcas.push([p, p+t.length]); i = p + t.length; }
+  });
+  if(!marcas.length) return h;
+  marcas.sort(function(a,b){ return a[0]-b[0]; });
+  var fund = [marcas[0]];
+  for(var k=1;k<marcas.length;k++){
+    var u = fund[fund.length-1];
+    if(marcas[k][0] <= u[1]) u[1] = Math.max(u[1], marcas[k][1]); else fund.push(marcas[k]);
+  }
+  var out='', pos=0;
+  fund.forEach(function(m){ out += h.slice(pos,m[0]) + '<mark>' + h.slice(m[0],m[1]) + '</mark>'; pos=m[1]; });
+  return out + h.slice(pos);
+}
+
+function filtrar(){
+  var t = q.value.trim();
+  var palabras = sinAcentos(t).split(/\s+/).filter(Boolean);
+  var reg=fReg.value, fam=fFam.value, mod=fMod.value, fase=fFase.value, fue=fFuente.value;
+  filtrados = D.filter(function(r){
+    if(reg && r.region!==reg) return false;
+    if(fam && r.familia!==fam) return false;
+    if(mod && r.modalidad!==mod) return false;
+    if(fase && r.fase!==fase) return false;
+    if(fue && (r.fuente||'').indexOf(fue)===-1) return false;
+    for(var i=0;i<palabras.length;i++){ if(r._b.indexOf(palabras[i])===-1) return false; }
+    return true;
+  });
+  mostrados = PASO;
+  limpiar.style.display = t ? 'block' : 'none';
+  pintar(palabras);
+}
+
+function pintar(term){ // term = array de palabras ya normalizadas
+  var lista=document.getElementById('lista'), trozo=filtrados.slice(0,mostrados), html='', grupo=null;
+  trozo.forEach(function(r){
+    if(r.region!==grupo){ grupo=r.region; html += '<div class="grupo">'+esc(grupo)+'</div>'; }
+    html += '<article class="ficha"><div class="cab">'+
+      '<span class="cuadro">'+resaltar(r.cuadro,term)+'</span>'+
+      '<span class="etq">'+esc(r.modalidad)+'</span>'+
+      (r.fase && r.fase!=='No consta' ? '<span class="etq fase">'+esc(r.fase)+'</span>' : '')+
+      '</div><dl>';
+    if(r.parametros) html += '<dt>Parámetros</dt><dd class="param">'+resaltar(r.parametros,term)+'</dd>';
+    if(r.tecnica && r.tecnica!=='No consta') html += '<dt>Técnica</dt><dd>'+resaltar(r.tecnica,term)+'</dd>';
+    if(r.sesiones && r.sesiones!=='No consta') html += '<dt>Sesiones</dt><dd>'+resaltar(r.sesiones,term)+'</dd>';
+    html += '</dl>';
+    var n=(r.notas||'').replace('[ANEXO B]','').trim();
+    if(n) html += '<div class="nota">'+resaltar(n,term)+'</div>';
+    html += '<div class="pie"><span>'+esc(r.fuente||'—')+'</span>'+
+            (r.cap?'<span>cap. '+esc(r.cap)+'</span>':'')+
+            (r.pag?'<span>pág. '+esc(r.pag)+'</span>':'')+'</div></article>';
+  });
+  lista.innerHTML = html;
+  document.getElementById('vacio').style.display = filtrados.length ? 'none' : 'block';
+  document.getElementById('conteo').textContent =
+    filtrados.length + (filtrados.length===1?' protocolo':' protocolos') +
+    (filtrados.length>mostrados ? ' — mostrando '+mostrados : '');
+  var btn=document.getElementById('mas');
+  btn.hidden = filtrados.length <= mostrados;
+  btn.textContent = 'Ver más ('+(filtrados.length-mostrados)+' restantes)';
+}
+
+var temp;
+q.addEventListener('input', function(){ clearTimeout(temp); temp=setTimeout(filtrar,140); });
+limpiar.addEventListener('click', function(){ q.value=''; q.focus(); filtrar(); });
+[fReg,fFam,fMod,fFase,fFuente].forEach(function(s){ s.addEventListener('change', filtrar); });
+document.getElementById('mas').addEventListener('click', function(){
+  mostrados += PASO*2; pintar(sinAcentos(q.value.trim()).split(/\s+/).filter(Boolean)); });
+
+document.getElementById('total').textContent = D.length + ' protocolos · sin conexión';
+filtrar();
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); });
+}
+})();
+</script>
+</body>
+</html>

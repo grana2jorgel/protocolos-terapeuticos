@@ -1,0 +1,18 @@
+{
+  "name": "Protocolos terapéuticos — agentes físicos y electroterapia",
+  "short_name": "Protocolos",
+  "description": "Vademécum consultable de protocolos de agentes físicos y electroterapia, con búsqueda y filtros, funciona sin conexión.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f6f7f9",
+  "theme_color": "#1d3557",
+  "lang": "es",
+  "categories": ["medical", "education", "productivity"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
