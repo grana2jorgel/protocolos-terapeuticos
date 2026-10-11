@@ -1,6 +1,6 @@
 # Protocolos terapéuticos — agentes físicos y electroterapia
 
-App de consulta con **3.517 protocolos** extraídos del tratado *Agentes Físicos Terapéuticos y Electroterapia* y de las doce obras de referencia que lo sostienen.
+App de consulta con **3.499 protocolos** extraídos del tratado *Agentes Físicos Terapéuticos y Electroterapia* y de las doce obras de referencia que lo sostienen.
 
 Funciona **sin conexión**: una vez abierta la primera vez, los datos quedan en el dispositivo.
 
@@ -11,7 +11,8 @@ Funciona **sin conexión**: una vez abierta la primera vez, los datos quedan en 
 - **Busca** en todo el contenido a la vez: patología, agente, parámetro, técnica. Sin acentos también encuentra (`epicondilalgia`, `laser`).
 - **Agrupa por cuadro clínico**: al buscar una condición aparecen juntos todos los agentes aplicables a ella, uno por fila, y arriba un resumen con cada agente y cuántos protocolos aporta. Pulsando ese resumen se filtra por ese agente.
 - **Parámetros en columnas fijas**: frecuencia, onda y modo, pulso, intensidad, potencia y dosis, longitud de onda, tiempo, temperatura y otros. Las nueve **aparecen siempre**, aunque estén vacías, para que se vea de un vistazo qué no consigna la fuente; un punto gris significa que ese dato no figura en el original. Nada del texto se pierde: lo que no encaja en ninguna columna va a «Otros».
-- **Técnica y sesiones al hacer clic** en el protocolo. Las advertencias quedan siempre a la vista.
+- **Técnica, sesiones y advertencias al hacer clic** en el protocolo. Un círculo ámbar con `!` junto al agente marca los que llevan advertencia.
+- **Sin filas redundantes**: cuando una entrada no decía nada que otra del mismo cuadro y agente no dijera ya —el eco resumido del Anexo B, por ejemplo—, se ha suprimido y sus siglas y su referencia se conservan en la que queda. Si solo cambiaba la fase, las fases se fusionan en una fila («Aguda; Subaguda»).
 - **Lo que no está dosificado va aparte**: los 656 agentes que la obra señala como posible aplicación sin dar ningún parámetro no se mezclan con los protocolos; van en un bloque propio al final, con su nota.
 - **Filtra** por región anatómica, familia de agentes, modalidad y fase del proceso.
 - Cada ficha lleva **parámetros, técnica, sesiones, fuente, capítulo y hoja** del tratado, para poder volver al razonamiento completo. «Hoja» es el número de hoja del PDF —el que se teclea en el lector para saltar—; entre paréntesis va el número impreso en esa página, 26 unidades menor.
@@ -57,7 +58,7 @@ Todos los protocolos están en **`datos.js`**, en un único array. Para cambiar,
 Después de editarlo hay que **subir el número de versión** en la primera línea de `sw.js`:
 
 ```js
-const VERSION = 'protocolos-v5';   // antes v4
+const VERSION = 'protocolos-v6';   // antes v5
 ```
 
 Sin ese cambio, los móviles que ya tengan la app seguirán viendo los datos antiguos, porque la caché está pensada para funcionar sin conexión.
@@ -83,6 +84,7 @@ Sin ese cambio, los móviles que ya tengan la app seguirán viendo los datos ant
 | `notas` | Advertencias, discrepancias, evidencia |
 | `p` | Los parámetros ya repartidos en columnas (`frec`, `onda`, `pulso`, `inten`, `dosis`, `lambda`, `tiempo`, `temp`, `otros`) |
 | `sd` | Vale 1 cuando la fuente no consigna ningún parámetro: va al bloque aparte |
+| `tambien` | Dónde más figura el mismo protocolo, cuando se fusionaron filas redundantes |
 
 ### Siglas de las obras
 

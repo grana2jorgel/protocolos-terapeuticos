@@ -77,14 +77,18 @@ tr.abrible{cursor:pointer}
 tr.abrible:focus-visible{outline:2px solid var(--acento);outline-offset:-2px}
 .flecha{display:inline-block;width:12px;color:var(--suave);font-size:10px;transition:transform .12s}
 .flecha.vacia{visibility:hidden}
+.chip-av{display:inline-block;margin-left:5px;width:14px;height:14px;line-height:14px;text-align:center;
+  border-radius:50%;background:var(--aviso-fondo);color:var(--aviso);border:1px solid var(--aviso);
+  font-size:10px;font-weight:800;vertical-align:1px}
+tr.det .nota{display:block;margin:6px 0 0}
 tr.abierto .flecha{transform:rotate(90deg);color:var(--acento)}
 tr.par:hover td{background:var(--fondo)}
 tr.par:hover td.cagente{background:var(--fondo)}
-tr.det td,tr.av td{padding-top:0;padding-bottom:9px;font-size:12.5px;color:var(--tenue);line-height:1.45;
+tr.det td{padding-top:0;padding-bottom:9px;font-size:12.5px;color:var(--tenue);line-height:1.45;
   border-bottom:1px solid var(--linea)}
-tr.det .caja,tr.av .caja{position:sticky;left:0;display:block;max-width:calc(100vw - 44px)}
+tr.det .caja{position:sticky;left:0;display:block;max-width:calc(100vw - 44px)}
 tr.det p{margin:0 0 5px}
-tr.det .k,tr.av .k{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--suave);
+tr.det .k{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--suave);
   font-weight:700;margin-right:5px}
 .nota{padding:6px 9px;background:var(--aviso-fondo);border-left:2px solid var(--aviso);
   border-radius:0 5px 5px 0;color:var(--tenue)}
@@ -245,32 +249,30 @@ function refs(r){
 }
 
 // Detalle plegable: técnica y sesiones. Las advertencias quedan siempre a la vista.
+function nota(r){ return (r.notas || '').replace('[ANEXO B]', '').trim(); }
+
 function detalle(r, term, id){
-  var d = '';
+  var d = '', n = nota(r);
   if(r.tecnica  && r.tecnica  !== 'No consta') d += '<p><span class="k">Técnica</span>'  + resaltar(r.tecnica, term)  + '</p>';
   if(r.sesiones && r.sesiones !== 'No consta') d += '<p><span class="k">Sesiones</span>' + resaltar(r.sesiones, term) + '</p>';
+  if(r.tambien) d += '<p><span class="k">También en</span>' + esc(r.tambien) + '</p>';
+  if(n) d += '<p class="nota">' + resaltar(n, term) + '</p>';
   return d ? '<tr class="det" id="' + id + '" hidden><td colspan="' + ANCHO + '">' +
              '<span class="caja">' + d + '</span></td></tr>' : '';
-}
-function aviso(r, term){
-  var n = (r.notas || '').replace('[ANEXO B]', '').trim();
-  return n ? '<tr class="av"><td colspan="' + ANCHO + '"><span class="caja nota">' +
-             resaltar(n, term) + '</span></td></tr>' : '';
 }
 
 var nid = 0;
 function filaProtocolo(r, term){
-  var pp = r.p || {}, h = '', id = 'd' + (++nid);
-  var hayDet = (r.tecnica && r.tecnica !== 'No consta') || (r.sesiones && r.sesiones !== 'No consta');
+  var pp = r.p || {}, h = '', id = 'd' + (++nid), n = nota(r);
+  var hayDet = (r.tecnica && r.tecnica !== 'No consta') || (r.sesiones && r.sesiones !== 'No consta') || n || r.tambien;
   h += '<tr class="par' + (hayDet ? ' abrible' : '') + '"' + (hayDet ? ' data-det="' + id + '" tabindex="0"' : '') + '>' +
        '<td class="cagente">' + (hayDet ? '<span class="flecha">▸</span>' : '<span class="flecha vacia"></span>') +
-       esc(r.modalidad) + '</td>' +
+       esc(r.modalidad) + (n ? '<span class="chip-av" title="Lleva advertencia: pulsa para leerla">!</span>' : '') + '</td>' +
        '<td class="fase">' + (r.fase && r.fase !== 'No consta' ? esc(r.fase) : '—') + '</td>';
   COLS.forEach(function(c){
     h += '<td class="val' + (pp[c] ? '' : ' nada') + '">' + (pp[c] ? resaltar(pp[c], term) : '·') + '</td>';
   });
   h += '<td class="ref">' + refs(r) + '</td></tr>';
-  h += aviso(r, term);
   if(hayDet) h += detalle(r, term, id);
   return h;
 }
