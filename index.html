@@ -31,6 +31,8 @@ header{position:sticky;top:0;z-index:20;background:var(--papel);border-bottom:1p
 .titulo{display:flex;align-items:baseline;gap:10px;margin-bottom:8px}
 .titulo h1{font-size:16px;margin:0;font-weight:650;letter-spacing:-.01em}
 .titulo span{font-size:12px;color:var(--suave)}
+.titulo .ver{font-weight:700;color:var(--acento);background:var(--acento-claro);
+  border-radius:5px;padding:1px 5px;font-size:11px}
 .buscador{position:relative}
 #q{width:100%;padding:11px 36px 11px 12px;font-size:16px;border:1px solid var(--linea);
   border-radius:var(--r);background:var(--fondo);color:var(--tinta);outline:none}
@@ -132,6 +134,8 @@ footer{text-align:center;font-size:11.5px;color:var(--suave);padding:0 20px 30px
 <script>
 (function(){
 'use strict';
+// Súbelo a la vez que VERSION en sw.js: es lo que se ve en la cabecera de la app.
+var VERSION_APP = 'v5';
 var D = window.PROTOCOLOS || [];
 var PASO = 25, mostrados = PASO, filtrados = D;
 
@@ -380,7 +384,8 @@ document.getElementById('resumen').addEventListener('click', function(e){
 document.getElementById('mas').addEventListener('click', function(){
   mostrados += PASO; pintar(sinAcentos(q.value.trim()).split(/\s+/).filter(Boolean)); });
 
-document.getElementById('total').textContent = D.length + ' protocolos · sin conexión';
+document.getElementById('total').innerHTML =
+  D.length.toLocaleString('es') + ' protocolos · <b class="ver">' + VERSION_APP + '</b> · sin conexión';
 filtrar();
 
 if('serviceWorker' in navigator){

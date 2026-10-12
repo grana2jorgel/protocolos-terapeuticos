@@ -55,6 +55,15 @@ El APK **lleva los datos dentro**: no necesita conexión ni siquiera la primera 
 
 Todos los protocolos están en **`datos.js`**, en un único array. Para cambiar, añadir o corregir uno, se edita ese fichero.
 
+### El número de versión
+
+La cabecera de la app muestra la versión (`v5`, `v6`…) junto al número de protocolos. Sirve para comprobar de un vistazo si el móvil ya tiene la última: si el número coincide con el de `sw.js`, está actualizada.
+
+Al cambiar los datos hay que subir ese número **en dos sitios**, y deben coincidir:
+
+- `sw.js`, primera línea: `const VERSION = 'protocolos-v6';`
+- `index.html`, al principio del script: `var VERSION_APP = 'v6';`
+
 Después de editarlo hay que **subir el número de versión** en la primera línea de `sw.js`:
 
 ```js
